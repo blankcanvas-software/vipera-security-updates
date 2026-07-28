@@ -1,0 +1,13 @@
+# Ignore build and IDE folders
+.vs/
+bin/
+obj/
+*.user
+*.pdb
+*.tmp
+
+# Unignore zip files and documentation
+!.gitignore
+!README.md
+!*.zip
+!**/*.zip
