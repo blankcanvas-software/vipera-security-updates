@@ -36,8 +36,8 @@
                 </Grid>
             </Border>
 
-            <!-- Hero Pro Plan Card -->
-            <Border Style="{StaticResource DarkCard}" Margin="0,0,0,24">
+            <!-- Hero Pro Plan Card (Visible for Free users) -->
+            <Border Style="{StaticResource DarkCard}" Margin="0,0,0,24" Visibility="{Binding IsFreeVersion, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -68,8 +68,8 @@
                 </Grid>
             </Border>
 
-            <!-- License Key Activation Box -->
-            <Border Style="{StaticResource DarkCard}" Margin="0,0,0,24">
+            <!-- License Key Activation Box (Visible for Free users) -->
+            <Border Style="{StaticResource DarkCard}" Margin="0,0,0,24" Visibility="{Binding IsFreeVersion, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <StackPanel>
                     <TextBlock Text="🔑 Already Have a License Key or Subscription?" FontSize="16" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" Margin="0,0,0,6"/>
                     <TextBlock Text="Enter your Vipera Pro License Key or order receipt token to activate across all your Windows devices." FontSize="13" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,14"/>

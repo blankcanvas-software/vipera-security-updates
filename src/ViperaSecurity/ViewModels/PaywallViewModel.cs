@@ -17,6 +17,9 @@ namespace ViperaSecurity.ViewModels
         private bool _isPremium;
 
         [ObservableProperty]
+        private bool _isFreeVersion;
+
+        [ObservableProperty]
         private string _priceText = "€39/year";
 
         [ObservableProperty]
@@ -32,6 +35,7 @@ namespace ViperaSecurity.ViewModels
         {
             _billingService = billingService;
             IsPremium = _billingService.IsPremium;
+            IsFreeVersion = !IsPremium;
             PriceText = _billingService.PriceText;
             FormattedExpiryDate = _billingService.FormattedExpiryDate;
             DaysRemainingText = _billingService.DaysRemainingText;
@@ -62,6 +66,7 @@ namespace ViperaSecurity.ViewModels
             if (_billingService.ActivateLicense(LicenseKeyInput))
             {
                 IsPremium = true;
+                IsFreeVersion = false;
                 FormattedExpiryDate = _billingService.FormattedExpiryDate;
                 DaysRemainingText = _billingService.DaysRemainingText;
                 ActivationMessage = $"Success! Vipera Pro Activated. Valid until: {FormattedExpiryDate} ({DaysRemainingText}).";
@@ -72,6 +77,7 @@ namespace ViperaSecurity.ViewModels
                 if (cloudSuccess)
                 {
                     IsPremium = true;
+                    IsFreeVersion = false;
                     FormattedExpiryDate = _billingService.FormattedExpiryDate;
                     DaysRemainingText = _billingService.DaysRemainingText;
                     ActivationMessage = $"Success! Subscription verified. Valid until: {FormattedExpiryDate} ({DaysRemainingText}).";
