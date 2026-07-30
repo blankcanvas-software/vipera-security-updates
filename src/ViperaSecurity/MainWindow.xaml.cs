@@ -40,6 +40,9 @@ namespace ViperaSecurity
             _autoScanScheduler = new AutoScanScheduler(_settingsService, _fileScanner);
             _autoScanScheduler.Start();
 
+            // Active Web Shield System Hosts Protection
+            _ = System.Threading.Tasks.Task.Run(() => _blocklistManager.ApplySystemHostsProtection(_settingsService.Settings.WebProtectionEnabled));
+
             DataContext = new MainViewModel(_settingsService, _billingService);
 
             NavigateToHome();
