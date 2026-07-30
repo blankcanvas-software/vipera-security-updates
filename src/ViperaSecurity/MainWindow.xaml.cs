@@ -43,6 +43,12 @@ namespace ViperaSecurity
             // Active Web Shield System Hosts Protection
             _ = System.Threading.Tasks.Task.Run(() => _blocklistManager.ApplySystemHostsProtection(_settingsService.Settings.WebProtectionEnabled));
 
+            // Windows Startup Auto-Launch Registration
+            if (_settingsService.Settings.LaunchOnWindowsStartup)
+            {
+                StartupManager.SetAutoStart(true);
+            }
+
             DataContext = new MainViewModel(_settingsService, _billingService);
 
             NavigateToHome();

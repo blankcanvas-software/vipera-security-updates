@@ -268,6 +268,7 @@ namespace ViperaSecurityInstaller
                         StatusMessage = "Registering in Windows Control Panel...";
                     });
                     RegisterAddRemovePrograms();
+                    RegisterWindowsStartup();
 
                     System.Windows.Application.Current.Dispatcher.Invoke(() =>
                     {
@@ -366,6 +367,20 @@ namespace ViperaSecurityInstaller
                         shortcut.Description = "Vipera Security Antivirus & Real-Time Protection";
                         shortcut.Save();
                     }
+                }
+            }
+            catch { }
+        }
+
+        private void RegisterWindowsStartup()
+        {
+            try
+            {
+                string targetExe = Path.Combine(InstallDirectory, "ViperaSecurity.exe");
+                if (File.Exists(targetExe))
+                {
+                    using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
+                    key?.SetValue("ViperaSecurity", $"\"{targetExe}\"");
                 }
             }
             catch { }

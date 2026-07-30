@@ -101,6 +101,7 @@ namespace ViperaSecurity.Models
         public bool AutoScanEnabled { get; set; } = true;
         public int AutoScanIntervalHours { get; set; } = 1;
         public bool AutoUpdateOnStartup { get; set; } = true;
+        public bool LaunchOnWindowsStartup { get; set; } = true;
         public string AutoScanSchedule { get; set; } = "Hourly (1 hr)";
         public string LicenseKey { get; set; } = string.Empty;
         public bool IsPremium { get; set; }

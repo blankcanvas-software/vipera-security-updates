@@ -32,6 +32,9 @@ namespace ViperaSecurity.ViewModels
         private bool _isAutoUpdateOnStartupEnabled;
 
         [ObservableProperty]
+        private bool _isLaunchOnWindowsStartupEnabled;
+
+        [ObservableProperty]
         private string _saveMessage = string.Empty;
 
         [ObservableProperty]
@@ -72,8 +75,16 @@ namespace ViperaSecurity.ViewModels
             IsRealTimeShieldEnabled = _settingsService.Settings.RealTimeShieldEnabled;
             IsAutoScanEnabled = _settingsService.Settings.AutoScanEnabled;
             IsAutoUpdateOnStartupEnabled = _settingsService.Settings.AutoUpdateOnStartup;
+            IsLaunchOnWindowsStartupEnabled = _settingsService.Settings.LaunchOnWindowsStartup;
 
             AppVersionText = $"v{UpdateService.GetInstalledVersion()}";
+        }
+
+        partial void OnIsLaunchOnWindowsStartupEnabledChanged(bool value)
+        {
+            _settingsService.Settings.LaunchOnWindowsStartup = value;
+            _settingsService.Save();
+            StartupManager.SetAutoStart(value);
         }
 
         [RelayCommand]
@@ -133,7 +144,10 @@ namespace ViperaSecurity.ViewModels
             _settingsService.Settings.RealTimeShieldEnabled = IsRealTimeShieldEnabled;
             _settingsService.Settings.AutoScanEnabled = IsAutoScanEnabled;
             _settingsService.Settings.AutoUpdateOnStartup = IsAutoUpdateOnStartupEnabled;
+            _settingsService.Settings.LaunchOnWindowsStartup = IsLaunchOnWindowsStartupEnabled;
             _settingsService.Save();
+
+            StartupManager.SetAutoStart(IsLaunchOnWindowsStartupEnabled);
 
             SaveMessage = "Settings updated successfully!";
         }
