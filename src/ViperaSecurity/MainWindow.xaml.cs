@@ -16,6 +16,8 @@ namespace ViperaSecurity
         private readonly IBillingService _billingService;
         private readonly UpdateService _updateService;
         private readonly AutoScanScheduler _autoScanScheduler;
+        private SystemTrayService? _trayService;
+        private bool _allowClose;
 
         private HomePage? _homePage;
         private ShieldPage? _shieldPage;
@@ -50,6 +52,8 @@ namespace ViperaSecurity
             }
 
             DataContext = new MainViewModel(_settingsService, _billingService);
+
+            InitializeSystemTray();
 
             NavigateToHome();
 
@@ -135,6 +139,65 @@ namespace ViperaSecurity
                 DataContext = new PaywallViewModel(_billingService)
             };
             MainContentFrame.Content = _paywallPage;
+        }
+
+        private void InitializeSystemTray()
+        {
+            try
+            {
+                _trayService = new SystemTrayService();
+                _trayService.Initialize(this);
+                _trayService.DoubleClicked += () => RestoreFromTray();
+                _trayService.RightClicked += () => RestoreFromTray();
+            }
+            catch { }
+        }
+
+        private void RestoreFromTray()
+        {
+            Show();
+            WindowState = WindowState.Normal;
+            Activate();
+            Focus();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_allowClose) return;
+
+            e.Cancel = true;
+            CloseConfirmationModal.Visibility = Visibility.Visible;
+        }
+
+        private void MinimizeToTray_Click(object sender, RoutedEventArgs e)
+        {
+            CloseConfirmationModal.Visibility = Visibility.Collapsed;
+            Hide();
+
+            try
+            {
+                _trayService?.ShowNotification(
+                    "Vipera Security Active",
+                    "Vipera Security is running in the background to protect your device 24/7."
+                );
+            }
+            catch { }
+        }
+
+        private void ExitApp_Click(object sender, RoutedEventArgs e)
+        {
+            _allowClose = true;
+            try
+            {
+                _trayService?.Remove();
+            }
+            catch { }
+            System.Windows.Application.Current.Shutdown();
+        }
+
+        private void CancelClose_Click(object sender, RoutedEventArgs e)
+        {
+            CloseConfirmationModal.Visibility = Visibility.Collapsed;
         }
     }
 }

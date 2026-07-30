@@ -6,6 +6,7 @@
     Width="1200" Height="780"
     MinWidth="1020" MinHeight="660"
     WindowStartupLocation="CenterScreen"
+    Closing="Window_Closing"
     Background="{StaticResource AppBackground}">
 
     <Grid>
@@ -116,6 +117,25 @@
 
         <!-- Main Page Container -->
         <ContentControl x:Name="MainContentFrame" Grid.Column="1"/>
+
+        <!-- Close Confirmation Modal Overlay -->
+        <Grid x:Name="CloseConfirmationModal" Grid.ColumnSpan="2" Visibility="Collapsed" Panel.ZIndex="1000" Background="#DD020617">
+            <Border Style="{StaticResource DarkCard}" Width="520" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="32" BorderBrush="{StaticResource EmeraldPrimary}" BorderThickness="1.5">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <TextBlock Text="🛡️ Exit Vipera Security?" FontSize="22" FontWeight="ExtraBold" Foreground="{StaticResource TextPrimary}"/>
+                    </StackPanel>
+
+                    <TextBlock Text="Closing the application stops your 24/7 Real-Time Shield and Background Scanner. Would you like to minimize to the System Tray to stay protected in the background instead?" FontSize="13.5" Foreground="{StaticResource TextSecondary}" TextWrapping="Wrap" LineHeight="20" Margin="0,0,0,24"/>
+
+                    <StackPanel>
+                        <Button Content="📥 Minimize to System Tray (Recommended)" Click="MinimizeToTray_Click" Style="{StaticResource PrimaryButton}" Padding="16,12" FontSize="14" Margin="0,0,0,10"/>
+                        <Button Content="🛑 Exit Application Completely" Click="ExitApp_Click" Style="{StaticResource SecondaryGlassButton}" Padding="16,10" FontSize="13" Margin="0,0,0,10"/>
+                        <Button Content="Cancel" Click="CancelClose_Click" Style="{StaticResource SecondaryGlassButton}" Padding="16,10" FontSize="13"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 
     <Window.Triggers>
