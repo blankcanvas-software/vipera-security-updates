@@ -180,12 +180,62 @@ namespace ViperaSecurityInstaller
                     File.WriteAllText(testFile, "test");
                     File.Delete(testFile);
 
-                    StatusMessage = "Unpacking Vipera Security standalone threat engine...";
-                    using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ViperaSecurityInstaller.ViperaPayload.zip");
+                    StatusMessage = "Preparing Vipera Security threat engine payload...";
+                    string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                    string localZip = Path.Combine(baseDir, "ViperaPayload.zip");
+                    string tempZip = Path.Combine(Path.GetTempPath(), "ViperaPayload_Install.zip");
 
-                    if (stream != null)
+                    if (File.Exists(localZip))
                     {
-                        using var archive = new ZipArchive(stream, ZipArchiveMode.Read);
+                        tempZip = localZip;
+                    }
+                    else
+                    {
+                        using var resStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("ViperaSecurityInstaller.ViperaPayload.zip");
+                        if (resStream != null)
+                        {
+                            using var fs = new FileStream(tempZip, FileMode.Create, FileAccess.Write);
+                            resStream.CopyTo(fs);
+                        }
+                        else
+                        {
+                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                StatusMessage = "Downloading threat engine payload from server...";
+                            });
+
+                            using var http = new System.Net.Http.HttpClient();
+                            http.DefaultRequestHeaders.UserAgent.ParseAdd("ViperaInstaller/2.0");
+                            string downloadUrl = "https://raw.githubusercontent.com/blankcanvas-software/vipera-security-updates/main/ViperaPayload.zip";
+
+                            using (var resp = http.GetAsync(downloadUrl, System.Net.Http.HttpCompletionOption.ResponseHeadersRead).GetAwaiter().GetResult())
+                            {
+                                resp.EnsureSuccessStatusCode();
+                                var totalBytes = resp.Content.Headers.ContentLength ?? 75000000;
+                                using var netStream = resp.Content.ReadAsStreamAsync().GetAwaiter().GetResult();
+                                using var fileStream = new FileStream(tempZip, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+
+                                byte[] buffer = new byte[16384];
+                                long totalRead = 0;
+                                int bytesRead;
+                                while ((bytesRead = netStream.Read(buffer, 0, buffer.Length)) > 0)
+                                {
+                                    fileStream.Write(buffer, 0, bytesRead);
+                                    totalRead += bytesRead;
+                                    double pct = ((double)totalRead / totalBytes) * 40.0;
+                                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        InstallProgress = pct;
+                                        StatusMessage = $"Downloading payload: {totalRead / 1048576} MB / {totalBytes / 1048576} MB";
+                                    });
+                                }
+                            }
+                        }
+                    }
+
+                    if (File.Exists(tempZip))
+                    {
+                        using var archive = ZipFile.OpenRead(tempZip);
                         int totalEntries = archive.Entries.Count;
 
                         for (int i = 0; i < totalEntries; i++)
@@ -203,35 +253,12 @@ namespace ViperaSecurityInstaller
 
                             entry.ExtractToFile(destFile, overwrite: true);
 
-                            double progress = ((i + 1) / (double)totalEntries) * 80.0;
+                            double progress = 40.0 + (((i + 1) / (double)totalEntries) * 45.0);
                             System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
                                 InstallProgress = progress;
                                 StatusMessage = $"Extracting: {entry.Name}";
                             });
-                        }
-                    }
-                    else
-                    {
-                        string baseDir = AppDomain.CurrentDomain.BaseDirectory;
-                        string publishSource = Path.Combine(baseDir, "publish");
-                        if (!Directory.Exists(publishSource))
-                        {
-                            publishSource = Path.GetFullPath(Path.Combine(baseDir, @"..\..\..\..\publish"));
-                        }
-
-                        if (Directory.Exists(publishSource))
-                        {
-                            var files = Directory.GetFiles(publishSource, "*.*", SearchOption.AllDirectories);
-                            for (int i = 0; i < files.Length; i++)
-                            {
-                                string src = files[i];
-                                string rel = Path.GetRelativePath(publishSource, src);
-                                string dst = Path.Combine(InstallDirectory, rel);
-                                string? dDir = Path.GetDirectoryName(dst);
-                                if (!string.IsNullOrEmpty(dDir) && !Directory.Exists(dDir)) Directory.CreateDirectory(dDir);
-                                File.Copy(src, dst, overwrite: true);
-                            }
                         }
                     }
 
