@@ -58,6 +58,31 @@ namespace ViperaSecurity.Services
             var result = new UpdateInfo();
             string currentVer = GetInstalledVersion();
 
+            // 1. Check live GitHub version.txt on main branch
+            try
+            {
+                string ghVerUrl = "https://raw.githubusercontent.com/blankcanvas-software/vipera-security-updates/main/src/ViperaSecurity/version.txt";
+                var ghResp = await _httpClient.GetAsync(ghVerUrl);
+                if (ghResp.IsSuccessStatusCode)
+                {
+                    string ghVerText = (await ghResp.Content.ReadAsStringAsync()).Trim();
+                    if (!string.IsNullOrEmpty(ghVerText) && Version.TryParse(ghVerText, out var remoteVer) && Version.TryParse(currentVer, out var localVer))
+                    {
+                        if (remoteVer > localVer)
+                        {
+                            result.IsUpdateAvailable = true;
+                            result.LatestVersion = ghVerText;
+                            result.DownloadUrl = "https://raw.githubusercontent.com/blankcanvas-software/vipera-security-updates/main/ViperaPayload.zip";
+                            result.ReleaseNotes = $"Vipera Security v{ghVerText} - Startup Auto-Update & Hourly Background Scanner Engine";
+                            result.IsMandatory = false;
+                            return result;
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            // 2. Fallback to Supabase app_versions table
             try
             {
                 string requestUrl = $"{_supabaseService.BaseUrl.TrimEnd('/')}/rest/v1/app_versions?select=version,download_url,release_notes,is_mandatory&order=created_at.desc&limit=1";
