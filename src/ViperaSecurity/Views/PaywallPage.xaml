@@ -9,31 +9,38 @@
 
             <!-- Active Subscription & Expiry Info Card -->
             <Border Style="{StaticResource GlowingCard}" Margin="0,0,0,24" Visibility="{Binding IsPremium, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <Grid Margin="4">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                <StackPanel Margin="8">
+                    <Grid Margin="0,0,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="0">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                            <TextBlock Text="👑 VIPERA PRO ACTIVE" FontSize="20" FontWeight="ExtraBold" Foreground="{StaticResource EmeraldPrimary}"/>
-                            <Border CornerRadius="4" Background="{StaticResource EmeraldBadgeBg}" Padding="8,3" Margin="12,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="ACTIVE PLAN" FontSize="11" FontWeight="Bold" Foreground="{StaticResource EmeraldPrimary}"/>
-                            </Border>
+                        <StackPanel Grid.Column="0">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <TextBlock Text="👑 VIPERA PRO ACTIVE" FontSize="20" FontWeight="ExtraBold" Foreground="{StaticResource EmeraldPrimary}"/>
+                                <Border CornerRadius="4" Background="{StaticResource EmeraldBadgeBg}" Padding="8,3" Margin="12,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock Text="ACTIVE PLAN" FontSize="11" FontWeight="Bold" Foreground="{StaticResource EmeraldPrimary}"/>
+                                </Border>
+                            </StackPanel>
+
+                            <TextBlock Text="{Binding DaysRemainingText, StringFormat='Subscription Status: Active ({0})'}" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock Text="Your device is fully protected by Cloud AI Threat Intelligence &amp; 24/7 Real-Time Shield." FontSize="12" Foreground="{StaticResource TextMuted}" Margin="0,4,0,0"/>
                         </StackPanel>
 
-                        <TextBlock Text="{Binding DaysRemainingText, StringFormat='Subscription Status: Active ({0})'}" FontSize="14" Foreground="{StaticResource TextSecondary}"/>
-                        <TextBlock Text="Your device is fully protected by Cloud AI Threat Intelligence &amp; 24/7 Shield." FontSize="12" Foreground="{StaticResource TextMuted}" Margin="0,4,0,0"/>
-                    </StackPanel>
+                        <Border Grid.Column="1" Background="#162032" CornerRadius="8" Padding="20,12" BorderThickness="1" BorderBrush="#334155" VerticalAlignment="Center">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="📅 SUBSCRIPTION EXPIRY DATE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding FormattedExpiryDate}" FontSize="18" FontWeight="ExtraBold" Foreground="{StaticResource EmeraldPrimary}" Margin="0,4,0,0" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
 
-                    <Border Grid.Column="1" Background="#162032" CornerRadius="8" Padding="18,12" BorderThickness="1" BorderBrush="#334155" VerticalAlignment="Center">
-                        <StackPanel HorizontalAlignment="Center">
-                            <TextBlock Text="📅 SUBSCRIPTION EXPIRY DATE" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center"/>
-                            <TextBlock Text="{Binding FormattedExpiryDate}" FontSize="16" FontWeight="ExtraBold" Foreground="{StaticResource EmeraldPrimary}" Margin="0,4,0,0" HorizontalAlignment="Center"/>
-                        </StackPanel>
+                    <!-- Expiry Date & Activation Status Banner -->
+                    <Border Background="#162032" CornerRadius="6" Padding="14,10" Margin="0,4,0,0" BorderThickness="1" BorderBrush="#1E293B">
+                        <TextBlock Text="{Binding ActivationMessage}" Foreground="{StaticResource EmeraldPrimary}" FontWeight="SemiBold" FontSize="13" TextWrapping="Wrap"/>
                     </Border>
-                </Grid>
+                </StackPanel>
             </Border>
 
             <!-- Hero Pro Plan Card (Visible for Free users) -->

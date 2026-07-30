@@ -134,6 +134,7 @@ namespace ViperaSecurity
 
         private void NavigateToPremium()
         {
+            (DataContext as MainViewModel)?.RefreshTierStatus();
             _paywallPage ??= new PaywallPage
             {
                 DataContext = new PaywallViewModel(_billingService)

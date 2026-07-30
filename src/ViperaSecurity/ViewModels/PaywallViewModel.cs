@@ -43,7 +43,7 @@ namespace ViperaSecurity.ViewModels
             if (IsPremium)
             {
                 LicenseKeyInput = _billingService.LicenseKey;
-                ActivationMessage = $"👑 Vipera Pro Active — Expiry: {FormattedExpiryDate} ({DaysRemainingText})";
+                ActivationMessage = $"👑 Vipera Pro Active — Expiry Date: {FormattedExpiryDate} ({DaysRemainingText})";
             }
         }
 
@@ -69,7 +69,7 @@ namespace ViperaSecurity.ViewModels
                 IsFreeVersion = false;
                 FormattedExpiryDate = _billingService.FormattedExpiryDate;
                 DaysRemainingText = _billingService.DaysRemainingText;
-                ActivationMessage = $"Success! Vipera Pro Activated. Valid until: {FormattedExpiryDate} ({DaysRemainingText}).";
+                ActivationMessage = $"🎉 Vipera Pro Activated Successfully! Expiry Date: {FormattedExpiryDate} ({DaysRemainingText}).";
             }
             else
             {
@@ -80,7 +80,7 @@ namespace ViperaSecurity.ViewModels
                     IsFreeVersion = false;
                     FormattedExpiryDate = _billingService.FormattedExpiryDate;
                     DaysRemainingText = _billingService.DaysRemainingText;
-                    ActivationMessage = $"Success! Subscription verified. Valid until: {FormattedExpiryDate} ({DaysRemainingText}).";
+                    ActivationMessage = $"🎉 Subscription Verified! Expiry Date: {FormattedExpiryDate} ({DaysRemainingText}).";
                 }
                 else
                 {

@@ -16,7 +16,7 @@ namespace ViperaSecurity.Services
             get
             {
                 var expiry = _settingsService.Settings.ProSubscriptionExpiry;
-                if (expiry == DateTime.MinValue && IsPremium)
+                if ((expiry == DateTime.MinValue || expiry <= DateTime.Now) && IsPremium)
                 {
                     expiry = DateTime.Now.AddYears(1);
                     _settingsService.Settings.ProSubscriptionExpiry = expiry;
@@ -59,6 +59,7 @@ namespace ViperaSecurity.Services
             {
                 _settingsService.Settings.LicenseKey = normalized;
                 _settingsService.Settings.IsPremium = true;
+                _settingsService.Settings.ProSubscriptionExpiry = DateTime.Now.AddYears(1);
                 _settingsService.Save();
                 return true;
             }
