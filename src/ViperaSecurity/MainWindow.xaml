@@ -1,0 +1,133 @@
+<Window
+    x:Class="ViperaSecurity.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Vipera Security - Real-Time Cyber Protection"
+    Width="1200" Height="780"
+    MinWidth="1020" MinHeight="660"
+    WindowStartupLocation="CenterScreen"
+    Background="{StaticResource AppBackground}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Sidebar Navigation Panel -->
+        <Border Grid.Column="0" Background="{StaticResource SidebarBackground}" BorderBrush="#1E293B" BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Branding & Logo Header -->
+                <Border Grid.Row="0" Padding="24,28,24,20" BorderBrush="#1E293B" BorderThickness="0,0,0,1">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="44" Height="44" CornerRadius="12" Background="{StaticResource HeroShieldGradient}" BorderBrush="{StaticResource EmeraldPrimary}" BorderThickness="1.5" Margin="0,0,14,0">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="16" ShadowDepth="0" Color="#10B981" Opacity="0.4"/>
+                            </Border.Effect>
+                            <TextBlock Text="🐍" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="VIPERA" FontSize="20" FontWeight="ExtraBold" Foreground="{StaticResource TextPrimary}"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                <TextBlock Text="SECURITY" FontSize="11" FontWeight="Bold" Foreground="{StaticResource TextMuted}" Margin="0,0,6,0"/>
+                                <Border CornerRadius="4" Background="#064E3B" Padding="5,1">
+                                    <TextBlock Text="{Binding TierBadgeText}" FontSize="9" FontWeight="ExtraBold" Foreground="{StaticResource EmeraldPrimary}"/>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Sidebar Navigation Menu Buttons -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="16,20">
+                    <StackPanel>
+                        <Button Click="Nav_Home" Style="{StaticResource SecondaryGlassButton}" HorizontalContentAlignment="Left" Padding="16,12" Margin="0,3">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🛡️" FontSize="16" Margin="0,0,12,0"/>
+                                <TextBlock Text="Dashboard" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="Nav_Scan" Style="{StaticResource SecondaryGlassButton}" HorizontalContentAlignment="Left" Padding="16,12" Margin="0,3">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="⚡" FontSize="16" Margin="0,0,12,0"/>
+                                <TextBlock Text="Threat Scanner" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="Nav_Shield" Style="{StaticResource SecondaryGlassButton}" HorizontalContentAlignment="Left" Padding="16,12" Margin="0,3">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="🌐" FontSize="16" Margin="0,0,12,0"/>
+                                <TextBlock Text="Web Shield" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="Nav_SystemHealth" Style="{StaticResource SecondaryGlassButton}" HorizontalContentAlignment="Left" Padding="16,12" Margin="0,3">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="💻" FontSize="16" Margin="0,0,12,0"/>
+                                <TextBlock Text="System Health" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="Nav_Settings" Style="{StaticResource SecondaryGlassButton}" HorizontalContentAlignment="Left" Padding="16,12" Margin="0,3">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="⚙️" FontSize="16" Margin="0,0,12,0"/>
+                                <TextBlock Text="Settings &amp; Updates" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Click="Nav_Premium" Style="{StaticResource PrimaryButton}" HorizontalContentAlignment="Center" Margin="0,16,0,0">
+                            <StackPanel HorizontalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Text="👑" FontSize="15" Margin="0,0,8,0"/>
+                                    <TextBlock Text="Vipera Pro" FontSize="14" FontWeight="ExtraBold"/>
+                                </StackPanel>
+                                <TextBlock Text="{Binding ProExpiryText}" FontSize="11" FontWeight="SemiBold" Foreground="#E2E8F0" Opacity="0.9" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Bottom Pulsing Status Card -->
+                <Border Grid.Row="2" Padding="20" BorderBrush="#1E293B" BorderThickness="0,1,0,0" Background="#0C1322">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                            <!-- Pulsing Emerald Heartbeat Dot -->
+                            <Grid Margin="0,0,10,0">
+                                <Ellipse x:Name="PulsingDot" Width="10" Height="10" Fill="{StaticResource EmeraldPrimary}" RenderTransformOrigin="0.5,0.5">
+                                    <Ellipse.RenderTransform>
+                                        <ScaleTransform x:Name="DotScale"/>
+                                    </Ellipse.RenderTransform>
+                                </Ellipse>
+                            </Grid>
+                            <TextBlock Text="SYSTEM PROTECTED" FontSize="11" FontWeight="ExtraBold" Foreground="{StaticResource EmeraldPrimary}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Text="Real-Time Engine Active" FontSize="11" Foreground="{StaticResource TextMuted}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Main Page Container -->
+        <ContentControl x:Name="MainContentFrame" Grid.Column="1"/>
+    </Grid>
+
+    <Window.Triggers>
+        <!-- Heartbeat Animation Storyboard -->
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard RepeatBehavior="Forever">
+                    <DoubleAnimation Storyboard.TargetName="DotScale" Storyboard.TargetProperty="ScaleX" From="1.0" To="1.4" Duration="0:0:1" AutoReverse="True"/>
+                    <DoubleAnimation Storyboard.TargetName="DotScale" Storyboard.TargetProperty="ScaleY" From="1.0" To="1.4" Duration="0:0:1" AutoReverse="True"/>
+                    <DoubleAnimation Storyboard.TargetName="PulsingDot" Storyboard.TargetProperty="Opacity" From="1.0" To="0.5" Duration="0:0:1" AutoReverse="True"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+</Window>

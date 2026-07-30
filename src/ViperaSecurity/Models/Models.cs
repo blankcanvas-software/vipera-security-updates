@@ -104,6 +104,7 @@ namespace ViperaSecurity.Models
         public string AutoScanSchedule { get; set; } = "Hourly (1 hr)";
         public string LicenseKey { get; set; } = string.Empty;
         public bool IsPremium { get; set; }
+        public DateTime ProSubscriptionExpiry { get; set; } = DateTime.MinValue;
         public DateTime LastScanTime { get; set; } = DateTime.MinValue;
         public int TotalScansCompleted { get; set; }
         public int ThreatsBlocked { get; set; }
